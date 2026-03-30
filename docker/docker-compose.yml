@@ -1,0 +1,23 @@
+services:
+  rabbitmq-bakery:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: rabbitmq-bakery-final
+    hostname: rabbit-bakery.local
+    ports:
+      - "5672:5672"
+      - "5671:5671"
+      - "15672:15672"
+      - "1883:1883"
+      - "61613:61613"
+      - "5552:5552"
+    volumes:
+      - ./certs:/cert:ro
+    environment:
+      RABBITMQ_ERLANG_COOKIE: bakery-training-cookie
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "check_running"]
+      interval: 10s
+      timeout: 5s
+      retries: 5

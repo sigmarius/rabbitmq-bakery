@@ -1,0 +1,452 @@
+{
+  "rabbit_version": "3.10.0",
+  "users": [
+    {
+      "name": "admin_bakery",
+      "password": "Admin_Bakery_1",
+      "tags": "administrator"
+    },
+    {
+      "name": "shop_app",
+      "password": "Shop_Secret_1",
+      "tags": ""
+    },
+    {
+      "name": "warehouse_app",
+      "password": "Wh_Secret_1",
+      "tags": ""
+    },
+    {
+      "name": "production_app",
+      "password": "Prod_Secret_1",
+      "tags": ""
+    },
+    {
+      "name": "courier_app",
+      "password": "Cour_Secret_1",
+      "tags": ""
+    },
+    {
+      "name": "procurement_app",
+      "password": "Proc_Secret_1",
+      "tags": ""
+    },
+    {
+      "name": "ops_shovel",
+      "password": "Shovel_Secret_1",
+      "tags": ""
+    },
+    {
+      "name": "federation_link",
+      "password": "Fed_Secret_1",
+      "tags": ""
+    },
+    {
+      "name": "mqtt_stomp",
+      "password": "Mqtt_Secret_1",
+      "tags": ""
+    },
+    {
+      "name": "notifier_app",
+      "password": "Notifier_Secret_1",
+      "tags": ""
+    }
+  ],
+  "vhosts": [
+    {
+      "name": "bakery"
+    },
+    {
+      "name": "bakery_archive"
+    }
+  ],
+  "permissions": [
+    {
+      "user": "admin_bakery",
+      "vhost": "bakery",
+      "configure": ".*",
+      "write": ".*",
+      "read": ".*"
+    },
+    {
+      "user": "admin_bakery",
+      "vhost": "bakery_archive",
+      "configure": ".*",
+      "write": ".*",
+      "read": ".*"
+    },
+    {
+      "user": "shop_app",
+      "vhost": "bakery",
+      "configure": "^$",
+      "write": "^(ex\\.orders|ex\\.orders\\.delayed)$",
+      "read": "^$"
+    },
+    {
+      "user": "warehouse_app",
+      "vhost": "bakery",
+      "configure": "^$",
+      "write": "^(ex\\.packing|ex\\.delivery)$",
+      "read": "^q\\.orders\\.picking$"
+    },
+    {
+      "user": "production_app",
+      "vhost": "bakery",
+      "configure": "^$",
+      "write": "^(ex\\.inventory|ex\\.alerts|ex\\.production)$",
+      "read": "^q\\.production\\.bake$"
+    },
+    {
+      "user": "courier_app",
+      "vhost": "bakery",
+      "configure": "^$",
+      "write": "^ex\\.orders$",
+      "read": "^q\\.delivery\\.pending$"
+    },
+    {
+      "user": "procurement_app",
+      "vhost": "bakery",
+      "configure": "^$",
+      "write": "^$",
+      "read": "^q\\.inventory\\.signals$"
+    },
+    {
+      "user": "ops_shovel",
+      "vhost": "bakery",
+      "configure": "^$",
+      "write": "^$",
+      "read": "^q\\.orders\\.completed$"
+    },
+    {
+      "user": "ops_shovel",
+      "vhost": "bakery_archive",
+      "configure": "^$",
+      "write": "^(q\\.archived\\.orders|amq\\.default)$",
+      "read": "^$"
+    },
+    {
+      "user": "federation_link",
+      "vhost": "bakery",
+      "configure": ".*",
+      "write": ".*",
+      "read": ".*"
+    },
+    {
+      "user": "mqtt_stomp",
+      "vhost": "bakery",
+      "configure": "^$",
+      "write": "^amq\\.topic$",
+      "read": "^amq\\.topic$"
+    },
+    {
+      "user": "notifier_app",
+      "vhost": "bakery",
+      "configure": "^$",
+      "write": "^$",
+      "read": "^q\\.orders\\.sms_sim$"
+    },
+    {
+      "user": "federation_link",
+      "vhost": "bakery_archive",
+      "configure": "^ex\\.inventory$",
+      "write": "^ex\\.inventory$",
+      "read": "^q\\.inventory\\.replica$"
+    }
+  ],
+  "topic_permissions": [],
+  "parameters": [],
+  "global_parameters": [],
+  "policies": [],
+  "queues": [
+    {
+      "name": "q.orders.picking",
+      "vhost": "bakery",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-type": "quorum",
+        "x-dead-letter-exchange": "ex.dlx",
+        "x-dead-letter-routing-key": "dead"
+      }
+    },
+    {
+      "name": "q.orders.dlq",
+      "vhost": "bakery",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-type": "quorum"
+      }
+    },
+    {
+      "name": "q.production.bake",
+      "vhost": "bakery",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-type": "quorum"
+      }
+    },
+    {
+      "name": "q.inventory.signals",
+      "vhost": "bakery",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-type": "quorum"
+      }
+    },
+    {
+      "name": "q.delivery.pending",
+      "vhost": "bakery",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-type": "quorum"
+      }
+    },
+    {
+      "name": "q.stream.orders",
+      "vhost": "bakery",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-type": "stream",
+        "x-stream-max-age": "86400000000000",
+        "x-stream-max-length-bytes": "500000000"
+      }
+    },
+    {
+      "name": "q.orders.completed",
+      "vhost": "bakery",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-type": "quorum"
+      }
+    },
+    {
+      "name": "q.orders.sms_sim",
+      "vhost": "bakery",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-type": "quorum"
+      }
+    },
+    {
+      "name": "q.procurement.critical",
+      "vhost": "bakery",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-type": "quorum"
+      }
+    },
+    {
+      "name": "q.archived.orders",
+      "vhost": "bakery_archive",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-type": "quorum"
+      }
+    },
+    {
+      "name": "q.inventory.replica",
+      "vhost": "bakery_archive",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-type": "quorum"
+      }
+    }
+  ],
+  "exchanges": [
+    {
+      "name": "ex.orders",
+      "vhost": "bakery",
+      "type": "topic",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    },
+    {
+      "name": "ex.production",
+      "vhost": "bakery",
+      "type": "direct",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    },
+    {
+      "name": "ex.inventory",
+      "vhost": "bakery",
+      "type": "fanout",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    },
+    {
+      "name": "ex.packing",
+      "vhost": "bakery",
+      "type": "topic",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    },
+    {
+      "name": "ex.delivery",
+      "vhost": "bakery",
+      "type": "topic",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    },
+    {
+      "name": "ex.dlx",
+      "vhost": "bakery",
+      "type": "direct",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    },
+    {
+      "name": "ex.orders.delayed",
+      "vhost": "bakery",
+      "type": "x-delayed-message",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {
+        "x-delayed-type": "topic"
+      }
+    },
+    {
+      "name": "ex.alerts",
+      "vhost": "bakery",
+      "type": "headers",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    },
+    {
+      "name": "ex.inventory",
+      "vhost": "bakery_archive",
+      "type": "fanout",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    }
+  ],
+  "bindings": [
+    {
+      "source": "ex.orders",
+      "vhost": "bakery",
+      "destination": "q.orders.picking",
+      "destination_type": "queue",
+      "routing_key": "order.new",
+      "arguments": {}
+    },
+    {
+      "source": "ex.orders",
+      "vhost": "bakery",
+      "destination": "q.stream.orders",
+      "destination_type": "queue",
+      "routing_key": "order.#",
+      "arguments": {}
+    },
+    {
+      "source": "ex.orders",
+      "vhost": "bakery",
+      "destination": "q.orders.completed",
+      "destination_type": "queue",
+      "routing_key": "order.delivered",
+      "arguments": {}
+    },
+    {
+      "source": "amq.topic",
+      "vhost": "bakery",
+      "destination": "q.orders.picking",
+      "destination_type": "queue",
+      "routing_key": "bakery.orders.new",
+      "arguments": {}
+    },
+    {
+      "source": "ex.production",
+      "vhost": "bakery",
+      "destination": "q.production.bake",
+      "destination_type": "queue",
+      "routing_key": "bake",
+      "arguments": {}
+    },
+    {
+      "source": "ex.inventory",
+      "vhost": "bakery",
+      "destination": "q.inventory.signals",
+      "destination_type": "queue",
+      "routing_key": "",
+      "arguments": {}
+    },
+    {
+      "source": "ex.packing",
+      "vhost": "bakery",
+      "destination": "q.delivery.pending",
+      "destination_type": "queue",
+      "routing_key": "packing.ready",
+      "arguments": {}
+    },
+    {
+      "source": "ex.delivery",
+      "vhost": "bakery",
+      "destination": "q.delivery.pending",
+      "destination_type": "queue",
+      "routing_key": "delivery.manifest",
+      "arguments": {}
+    },
+    {
+      "source": "ex.dlx",
+      "vhost": "bakery",
+      "destination": "q.orders.dlq",
+      "destination_type": "queue",
+      "routing_key": "dead",
+      "arguments": {}
+    },
+    {
+      "source": "ex.orders.delayed",
+      "vhost": "bakery",
+      "destination": "q.orders.sms_sim",
+      "destination_type": "queue",
+      "routing_key": "order.reminder",
+      "arguments": {}
+    },
+    {
+      "source": "ex.alerts",
+      "vhost": "bakery",
+      "destination": "q.procurement.critical",
+      "destination_type": "queue",
+      "routing_key": "",
+      "arguments": {
+        "x-match": "all",
+        "level": "critical",
+        "subsystem": "raw_material"
+      }
+    },
+    {
+      "source": "ex.inventory",
+      "vhost": "bakery_archive",
+      "destination": "q.inventory.replica",
+      "destination_type": "queue",
+      "routing_key": "",
+      "arguments": {}
+    }
+  ]
+}
